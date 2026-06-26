@@ -88,4 +88,64 @@ export class ProductRepository {
     }
     return out;
   }
+
+  /**
+   * Release 1.1 — Search & Discovery (FEATURE-0002 / RFC-0001).
+   *
+   * Free-text search backed by PostgreSQL Full-Text Search on the
+   * `search_tsv` generated column (see migration
+   * `20260626_search_products_fts`). The 'simple' dictionary keeps the
+   * implementation locale-agnostic so fa / en / ar queries all hit the
+   * same index without language-specific stemming.
+   *
+   * For very short queries (1-2 chars) the tsvector tokeniser is too
+   * coarse, so we fall back to a trigram-backed `ilike` on `name`. Both
+   * branches go through the repository, so higher layers stay unchanged
+   * if the storage strategy is swapped later.
+   */
+  async search(query: SearchProductsQuery): Promise<{
+    rows: Record<string, unknown>[];
+    total: number;
+  }> {
+    const raw = (query.q ?? "").trim();
+    if (!raw) return { rows: [], total: 0 };
+
+    const limit = Math.min(Math.max(query.limit ?? 24, 1), 100);
+    const offset = Math.max(query.offset ?? 0, 0);
+
+    // Tokenise on whitespace + common separators. Strip tsquery-reserved
+    // characters so attacker-controlled input cannot break the query.
+    const tokens = raw
+      .split(/[\s,;()<>!&|:*'"\\]+/u)
+      .map((t) => t.trim())
+      .filter((t) => t.length > 0);
+
+    const useFts = tokens.length > 0 && tokens.some((t) => t.length >= 3);
+
+    let q = this.db
+      .from("products")
+      .select(SUMMARY_SELECT, { count: "exact" })
+      .order("updated_at", { ascending: false })
+      .range(offset, offset + limit - 1);
+
+    if (query.categoryKey) q = q.eq("category_key", query.categoryKey);
+
+    if (useFts) {
+      // Prefix-match each token and AND them together so multi-word
+      // queries narrow the result set rather than widening it.
+      const tsQuery = tokens.map((t) => `${t}:*`).join(" & ");
+      q = q.textSearch("search_tsv", tsQuery, { config: "simple" });
+    } else {
+      // Short query → trigram-backed substring match on the canonical name.
+      const safe = raw.replace(/[%_\\]/g, (m) => `\\${m}`);
+      q = q.ilike("name", `%${safe}%`);
+    }
+
+    const { data, error, count } = await q;
+    if (error) throw error;
+    return {
+      rows: (data as Record<string, unknown>[]) ?? [],
+      total: count ?? 0,
+    };
+  }
 }
