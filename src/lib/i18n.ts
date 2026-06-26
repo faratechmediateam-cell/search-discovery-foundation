@@ -329,5 +329,16 @@ export const T = {
     fa: "در حال حاضر محتوایی برای نمایش در این صفحه وجود ندارد.",
     ar: "لا يوجد محتوى لعرضه في هذا العرض حاليًا.",
   },
+  // Release 1.3 — Related Products (FEATURE-0004 / RFC-0003)
+  relatedProducts: {
+    en: "Related Products",
+    fa: "محصولات مرتبط",
+    ar: "منتجات ذات صلة",
+  },
+  relatedProductsLoading: {
+    en: "Loading related products…",
+    fa: "در حال بارگذاری محصولات مرتبط…",
+    ar: "جارٍ تحميل المنتجات ذات الصلة…",
+  },
 };
 
