@@ -12,6 +12,7 @@ import { ProductService, ProductNotFoundError } from "./product.service";
 import type {
   ListProductsResultDto,
   ProductDetailDto,
+  RelatedProductsResultDto,
   SearchProductsResultDto,
 } from "./product.dto";
 
