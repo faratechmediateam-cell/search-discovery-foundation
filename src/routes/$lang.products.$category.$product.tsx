@@ -28,10 +28,14 @@ export const Route = createFileRoute("/$lang/products/$category/$product")({
     const detail = await getProductBySlug({ data: { slug: params.product } });
     if (detail.categoryKey !== enumKey) throw notFound();
 
-    const [allCategories, productsResult, copy] = await Promise.all([
+    const [allCategories, productsResult, copy, related] = await Promise.all([
       listCategories(),
       listProducts({ data: { categoryKey: enumKey, limit: 100, offset: 0 } }),
       getCategoryCopy({ data: { slug: params.category } }),
+      // Release 1.3 — Related Products (FEATURE-0004 / RFC-0003).
+      getRelatedProducts({
+        data: { productId: detail.id, categoryKey: enumKey, limit: 6 },
+      }),
     ]);
     const catDto = allCategories.find((c) => c.key === enumKey);
     if (!catDto) throw notFound();
