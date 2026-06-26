@@ -111,6 +111,12 @@ export const Route = createFileRoute("/$lang/products/$category/$product")({
 
 function ProductView() {
   const { lang } = Route.useParams();
-  const { category, product } = Route.useLoaderData();
-  return <ProductPage lang={lang as Lang} category={category} product={product} />;
+  const { category, product, relatedItems } = Route.useLoaderData();
+  const l = lang as Lang;
+  return (
+    <>
+      <ProductPage lang={l} category={category} product={product} />
+      <RelatedProducts lang={l} items={relatedItems} />
+    </>
+  );
 }
