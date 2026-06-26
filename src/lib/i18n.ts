@@ -293,4 +293,25 @@ export const T = {
   specWeightVal: { en: "Up to 130 kg", fa: "تا ۱۳۰ کیلوگرم", ar: "حتى 130 كجم" },
   specWidthVal: { en: "40 – 50 cm", fa: "۴۰ – ۵۰ سانتی‌متر", ar: "40 – 50 سم" },
   specWarrantyVal: { en: "24 months", fa: "۲۴ ماه", ar: "24 شهرًا" },
+  // Release 1.1 — Search & Discovery
+  search: { en: "Search", fa: "جستجو", ar: "بحث" },
+  searchPlaceholder: {
+    en: "Search products, codes, series…",
+    fa: "جستجوی محصولات، کدها، سری‌ها…",
+    ar: "ابحث في المنتجات والرموز والسلاسل…",
+  },
+  searchSubmit: { en: "Search", fa: "جستجو", ar: "بحث" },
+  searching: { en: "Searching…", fa: "در حال جستجو…", ar: "جارٍ البحث…" },
+  searchResultsFor: { en: "Results for", fa: "نتایج برای", ar: "نتائج البحث عن" },
+  searchResultsCount: { en: "results", fa: "نتیجه", ar: "نتيجة" },
+  searchNoResults: {
+    en: "No products matched your search.",
+    fa: "محصولی با جستجوی شما مطابقت نداشت.",
+    ar: "لا توجد منتجات تطابق بحثك.",
+  },
+  searchEmptyState: {
+    en: "Type a product name, code or series to search the catalogue.",
+    fa: "نام محصول، کد یا سری را برای جستجو در کاتالوگ وارد کنید.",
+    ar: "اكتب اسم منتج أو رمزًا أو سلسلة للبحث في الكتالوج.",
+  },
 };
