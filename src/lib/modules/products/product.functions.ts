@@ -80,3 +80,16 @@ export const searchProducts = createServerFn({ method: "GET" })
     const service = new ProductService();
     return service.search(data);
   });
+/**
+ * Release 1.3 — Related Products (FEATURE-0004 / RFC-0003).
+ *
+ * Public endpoint returning same-category related products. Validates
+ * input with Zod and delegates to `ProductService.getRelated` — no
+ * business logic lives here.
+ */
+export const getRelatedProducts = createServerFn({ method: "GET" })
+  .inputValidator((d: unknown) => RelatedSchema.parse(d))
+  .handler(async ({ data }): Promise<RelatedProductsResultDto> => {
+    const service = new ProductService();
+    return service.getRelated(data);
+  });
