@@ -158,3 +158,21 @@ export interface SearchProductsResultDto {
   items: ProductSummaryDto[];
   total: number;
 }
+
+/**
+ * Release 1.3 — Related Products (FEATURE-0004 / RFC-0003).
+ *
+ * Deterministic same-category recommendations. The current product is
+ * excluded by the repository; only PUBLISHED rows are returned (RLS +
+ * explicit filter). `limit` is the maximum number of related items the
+ * caller wants to render — the repository caps the upper bound.
+ */
+export interface RelatedProductsQuery {
+  productId: string;
+  categoryKey: ProductCategoryKey;
+  limit?: number;
+}
+
+export interface RelatedProductsResultDto {
+  items: ProductSummaryDto[];
+}

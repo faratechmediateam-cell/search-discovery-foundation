@@ -1,5 +1,6 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { ProductPage } from "@/components/faratech/product-page";
+import { RelatedProducts } from "@/components/faratech/related-products";
 import type { Lang } from "@/lib/i18n";
 import {
   buildLocaleMeta,
@@ -9,6 +10,7 @@ import {
 } from "@/lib/seo";
 import {
   getProductBySlug,
+  getRelatedProducts,
   listProducts,
 } from "@/lib/modules/products/product.functions";
 import {
@@ -26,10 +28,14 @@ export const Route = createFileRoute("/$lang/products/$category/$product")({
     const detail = await getProductBySlug({ data: { slug: params.product } });
     if (detail.categoryKey !== enumKey) throw notFound();
 
-    const [allCategories, productsResult, copy] = await Promise.all([
+    const [allCategories, productsResult, copy, related] = await Promise.all([
       listCategories(),
       listProducts({ data: { categoryKey: enumKey, limit: 100, offset: 0 } }),
       getCategoryCopy({ data: { slug: params.category } }),
+      // Release 1.3 — Related Products (FEATURE-0004 / RFC-0003).
+      getRelatedProducts({
+        data: { productId: detail.id, categoryKey: enumKey, limit: 6 },
+      }),
     ]);
     const catDto = allCategories.find((c) => c.key === enumKey);
     if (!catDto) throw notFound();
@@ -52,6 +58,7 @@ export const Route = createFileRoute("/$lang/products/$category/$product")({
     return {
       category: dtoToCategory(catDto, productsResult.items, copy),
       product: detailToProduct(detail),
+      relatedItems: related.items,
       seo: { productLd, faqLd, description: seoDescription, ogImage },
     };
   },
@@ -104,6 +111,12 @@ export const Route = createFileRoute("/$lang/products/$category/$product")({
 
 function ProductView() {
   const { lang } = Route.useParams();
-  const { category, product } = Route.useLoaderData();
-  return <ProductPage lang={lang as Lang} category={category} product={product} />;
+  const { category, product, relatedItems } = Route.useLoaderData();
+  const l = lang as Lang;
+  return (
+    <>
+      <ProductPage lang={l} category={category} product={product} />
+      <RelatedProducts lang={l} items={relatedItems} />
+    </>
+  );
 }

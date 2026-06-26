@@ -12,6 +12,7 @@ import { ProductService, ProductNotFoundError } from "./product.service";
 import type {
   ListProductsResultDto,
   ProductDetailDto,
+  RelatedProductsResultDto,
   SearchProductsResultDto,
 } from "./product.dto";
 
@@ -40,6 +41,12 @@ const SearchSchema = z.object({
   categoryKey: CategorySchema.optional(),
   limit: z.number().int().min(1).max(50).optional(),
   offset: z.number().int().min(0).optional(),
+});
+
+const RelatedSchema = z.object({
+  productId: z.string().uuid(),
+  categoryKey: CategorySchema,
+  limit: z.number().int().min(1).max(24).optional(),
 });
 
 export const listProducts = createServerFn({ method: "GET" })
@@ -72,4 +79,17 @@ export const searchProducts = createServerFn({ method: "GET" })
   .handler(async ({ data }): Promise<SearchProductsResultDto> => {
     const service = new ProductService();
     return service.search(data);
+  });
+/**
+ * Release 1.3 — Related Products (FEATURE-0004 / RFC-0003).
+ *
+ * Public endpoint returning same-category related products. Validates
+ * input with Zod and delegates to `ProductService.getRelated` — no
+ * business logic lives here.
+ */
+export const getRelatedProducts = createServerFn({ method: "GET" })
+  .inputValidator((d: unknown) => RelatedSchema.parse(d))
+  .handler(async ({ data }): Promise<RelatedProductsResultDto> => {
+    const service = new ProductService();
+    return service.getRelated(data);
   });

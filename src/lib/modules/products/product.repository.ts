@@ -8,7 +8,11 @@
  * returned to the public client.
  */
 import { getServerSupabase, type DbClient } from "../shared/supabase-server";
-import type { ListProductsQuery, SearchProductsQuery } from "./product.dto";
+import type {
+  ListProductsQuery,
+  RelatedProductsQuery,
+  SearchProductsQuery,
+} from "./product.dto";
 
 const DETAIL_SELECT = `
   *,
@@ -147,5 +151,28 @@ export class ProductRepository {
       rows: (data as Record<string, unknown>[]) ?? [],
       total: count ?? 0,
     };
+  }
+
+  /**
+   * Release 1.3 — Related Products (FEATURE-0004 / RFC-0003).
+   *
+   * Returns same-category PUBLISHED products, excluding the current
+   * product, ordered deterministically (most-recently-updated first).
+   * Per RFC-0003 the selection logic lives ONLY in the repository so
+   * higher layers stay swappable when the strategy evolves.
+   */
+  async findRelated(query: RelatedProductsQuery): Promise<{
+    rows: Record<string, unknown>[];
+  }> {
+    const limit = Math.min(Math.max(query.limit ?? 6, 1), 24);
+    const { data, error } = await this.db
+      .from("products")
+      .select(SUMMARY_SELECT)
+      .eq("category_key", query.categoryKey)
+      .neq("id", query.productId)
+      .order("updated_at", { ascending: false })
+      .limit(limit);
+    if (error) throw error;
+    return { rows: (data as Record<string, unknown>[]) ?? [] };
   }
 }
