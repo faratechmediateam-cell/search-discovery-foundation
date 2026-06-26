@@ -1,5 +1,6 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { ProductPage } from "@/components/faratech/product-page";
+import { RelatedProducts } from "@/components/faratech/related-products";
 import type { Lang } from "@/lib/i18n";
 import {
   buildLocaleMeta,
@@ -9,6 +10,7 @@ import {
 } from "@/lib/seo";
 import {
   getProductBySlug,
+  getRelatedProducts,
   listProducts,
 } from "@/lib/modules/products/product.functions";
 import {
