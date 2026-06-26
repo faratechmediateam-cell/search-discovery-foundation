@@ -8,7 +8,7 @@
  * returned to the public client.
  */
 import { getServerSupabase, type DbClient } from "../shared/supabase-server";
-import type { ListProductsQuery } from "./product.dto";
+import type { ListProductsQuery, SearchProductsQuery } from "./product.dto";
 
 const DETAIL_SELECT = `
   *,
