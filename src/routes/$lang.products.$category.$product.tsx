@@ -58,6 +58,7 @@ export const Route = createFileRoute("/$lang/products/$category/$product")({
     return {
       category: dtoToCategory(catDto, productsResult.items, copy),
       product: detailToProduct(detail),
+      relatedItems: related.items,
       seo: { productLd, faqLd, description: seoDescription, ogImage },
     };
   },
