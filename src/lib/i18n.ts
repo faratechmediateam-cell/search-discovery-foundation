@@ -314,4 +314,20 @@ export const T = {
     fa: "نام محصول، کد یا سری را برای جستجو در کاتالوگ وارد کنید.",
     ar: "اكتب اسم منتج أو رمزًا أو سلسلة للبحث في الكتالوج.",
   },
+  // Release 1.2 — Design System: shared UI state strings.
+  loading: { en: "Loading…", fa: "در حال بارگذاری…", ar: "جارٍ التحميل…" },
+  retry: { en: "Try again", fa: "تلاش مجدد", ar: "أعد المحاولة" },
+  errorTitle: { en: "Something went wrong", fa: "خطایی رخ داد", ar: "حدث خطأ ما" },
+  errorBody: {
+    en: "We couldn’t complete that request. Please try again in a moment.",
+    fa: "نتوانستیم این درخواست را انجام دهیم. لطفاً کمی بعد دوباره تلاش کنید.",
+    ar: "لم نتمكّن من إكمال الطلب. يرجى المحاولة مرة أخرى بعد قليل.",
+  },
+  emptyTitle: { en: "Nothing here yet", fa: "هنوز چیزی اینجا نیست", ar: "لا يوجد شيء هنا بعد" },
+  emptyBody: {
+    en: "There is no content to display in this view right now.",
+    fa: "در حال حاضر محتوایی برای نمایش در این صفحه وجود ندارد.",
+    ar: "لا يوجد محتوى لعرضه في هذا العرض حاليًا.",
+  },
 };
+

@@ -40,6 +40,20 @@
   --radius-xl: calc(var(--radius) * 1.5);
   --radius-2xl: calc(var(--radius) * 2);
   --radius-3xl: calc(var(--radius) * 3);
+
+  /* Release 1.2 — Design System: shared shadow scale. */
+  --shadow-xs: 0 1px 2px 0 oklch(0.12 0.03 255 / 0.04);
+  --shadow-sm: 0 1px 2px 0 oklch(0.12 0.03 255 / 0.06), 0 1px 1px 0 oklch(0.12 0.03 255 / 0.04);
+  --shadow-md: 0 4px 8px -2px oklch(0.12 0.03 255 / 0.08), 0 2px 4px -2px oklch(0.12 0.03 255 / 0.04);
+  --shadow-lg: 0 12px 24px -6px oklch(0.12 0.03 255 / 0.12), 0 4px 8px -4px oklch(0.12 0.03 255 / 0.06);
+  --shadow-xl: 0 24px 48px -12px oklch(0.12 0.03 255 / 0.18);
+
+  /* Release 1.2 — Design System: shared motion timing tokens. */
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --duration-slow: 320ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-emphasized: cubic-bezier(0.3, 0, 0.1, 1);
 }
 
 :root {
@@ -243,3 +257,11 @@ html[lang="fa"] .font-heading { font-family: 'Peyda', 'Vazirmatn', var(--font-he
 .safe-py { padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); }
 .fluid-section { padding-block: clamp(2.5rem, 4vw + 1rem, 6rem); }
 .fluid-container-px { padding-inline: clamp(1rem, 3vw, 2.5rem); }
+
+/* Release 1.2 — Design System: shared page container + focus-ring utilities. */
+.ds-page { padding-inline: clamp(1rem, 3vw, 2.5rem); padding-block: clamp(2rem, 4vw, 4rem); max-width: 80rem; margin-inline: auto; }
+.ds-section { padding-block: clamp(2rem, 4vw + 0.5rem, 5rem); }
+.ds-focus-ring:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; border-radius: var(--radius-sm); }
+@keyframes ds-spin { to { transform: rotate(360deg); } }
+.ds-spin { animation: ds-spin var(--duration-slow, 320ms) linear infinite; }
+@media (prefers-reduced-motion: reduce) { .ds-spin { animation-duration: 1.5s; } }

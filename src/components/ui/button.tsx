@@ -16,11 +16,16 @@ const buttonVariants = cva(
         secondary: "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
+        // Release 1.2 — Design System: brand accent (Faratech red).
+        brand:
+          "bg-brand-red text-white shadow-sm hover:bg-brand-red-dark focus-visible:ring-brand-red",
       },
       size: {
         default: "h-9 px-4 py-2",
         sm: "h-8 rounded-md px-3 text-xs",
         lg: "h-10 rounded-md px-8",
+        // Release 1.2 — Design System: hero/CTA size.
+        xl: "h-12 rounded-lg px-10 text-base",
         icon: "h-9 w-9",
       },
     },
