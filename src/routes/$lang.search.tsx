@@ -31,7 +31,7 @@ const SearchSchema = z.object({
 export const Route = createFileRoute("/$lang/search")({
   validateSearch: (s: Record<string, unknown>) => SearchSchema.parse(s ?? {}),
   loaderDeps: ({ search }) => ({ q: search.q ?? "" }),
-  loader: async ({ deps }) => {
+  loader: async ({ deps }): Promise<SearchProductsResultDto> => {
     const q = (deps.q ?? "").trim();
     if (!q) return { query: "", items: [], total: 0 };
     return searchProducts({ data: { q, limit: 48, offset: 0 } });
