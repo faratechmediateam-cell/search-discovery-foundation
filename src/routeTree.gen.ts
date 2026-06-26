@@ -15,6 +15,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as LangIndexRouteImport } from './routes/$lang.index'
 import { Route as LangSparePartsRouteImport } from './routes/$lang.spare-parts'
+import { Route as LangSearchRouteImport } from './routes/$lang.search'
 import { Route as AdminProductsIndexRouteImport } from './routes/admin.products.index'
 import { Route as LangProductsIndexRouteImport } from './routes/$lang.products.index'
 import { Route as AdminProductsNewRouteImport } from './routes/admin.products.new'
@@ -52,6 +53,11 @@ const LangIndexRoute = LangIndexRouteImport.update({
 const LangSparePartsRoute = LangSparePartsRouteImport.update({
   id: '/spare-parts',
   path: '/spare-parts',
+  getParentRoute: () => LangRoute,
+} as any)
+const LangSearchRoute = LangSearchRouteImport.update({
+  id: '/search',
+  path: '/search',
   getParentRoute: () => LangRoute,
 } as any)
 const AdminProductsIndexRoute = AdminProductsIndexRouteImport.update({
@@ -101,6 +107,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/$lang': typeof LangRouteWithChildren
   '/admin': typeof AdminRouteWithChildren
+  '/$lang/search': typeof LangSearchRoute
   '/$lang/spare-parts': typeof LangSparePartsRoute
   '/$lang/': typeof LangIndexRoute
   '/admin/': typeof AdminIndexRoute
@@ -115,6 +122,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/$lang/search': typeof LangSearchRoute
   '/$lang/spare-parts': typeof LangSparePartsRoute
   '/$lang': typeof LangIndexRoute
   '/admin': typeof AdminIndexRoute
@@ -132,6 +140,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/$lang': typeof LangRouteWithChildren
   '/admin': typeof AdminRouteWithChildren
+  '/$lang/search': typeof LangSearchRoute
   '/$lang/spare-parts': typeof LangSparePartsRoute
   '/$lang/': typeof LangIndexRoute
   '/admin/': typeof AdminIndexRoute
@@ -150,6 +159,7 @@ export interface FileRouteTypes {
     | '/'
     | '/$lang'
     | '/admin'
+    | '/$lang/search'
     | '/$lang/spare-parts'
     | '/$lang/'
     | '/admin/'
@@ -164,6 +174,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/$lang/search'
     | '/$lang/spare-parts'
     | '/$lang'
     | '/admin'
@@ -180,6 +191,7 @@ export interface FileRouteTypes {
     | '/'
     | '/$lang'
     | '/admin'
+    | '/$lang/search'
     | '/$lang/spare-parts'
     | '/$lang/'
     | '/admin/'
@@ -244,6 +256,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LangSparePartsRouteImport
       parentRoute: typeof LangRoute
     }
+    '/$lang/search': {
+      id: '/$lang/search'
+      path: '/search'
+      fullPath: '/$lang/search'
+      preLoaderRoute: typeof LangSearchRouteImport
+      parentRoute: typeof LangRoute
+    }
     '/admin/products/': {
       id: '/admin/products/'
       path: '/products'
@@ -304,6 +323,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface LangRouteChildren {
+  LangSearchRoute: typeof LangSearchRoute
   LangSparePartsRoute: typeof LangSparePartsRoute
   LangIndexRoute: typeof LangIndexRoute
   LangProductsIndexRoute: typeof LangProductsIndexRoute
@@ -312,6 +332,7 @@ interface LangRouteChildren {
 }
 
 const LangRouteChildren: LangRouteChildren = {
+  LangSearchRoute: LangSearchRoute,
   LangSparePartsRoute: LangSparePartsRoute,
   LangIndexRoute: LangIndexRoute,
   LangProductsIndexRoute: LangProductsIndexRoute,
