@@ -15,6 +15,10 @@ import { z } from "zod";
 import { Search as SearchIcon } from "lucide-react";
 
 import { searchProducts } from "@/lib/modules/products/product.functions";
+import type {
+  ProductSummaryDto,
+  SearchProductsResultDto,
+} from "@/lib/modules/products/product.dto";
 import { enumToSlug } from "@/lib/category-slug";
 import { T, t, type Lang } from "@/lib/i18n";
 import { buildLocaleMeta } from "@/lib/seo";
