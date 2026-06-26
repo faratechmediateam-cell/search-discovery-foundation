@@ -43,6 +43,12 @@ const SearchSchema = z.object({
   offset: z.number().int().min(0).optional(),
 });
 
+const RelatedSchema = z.object({
+  productId: z.string().uuid(),
+  categoryKey: CategorySchema,
+  limit: z.number().int().min(1).max(24).optional(),
+});
+
 export const listProducts = createServerFn({ method: "GET" })
   .inputValidator((d: unknown) => ListSchema.parse(d ?? {}))
   .handler(async ({ data }): Promise<ListProductsResultDto> => {
