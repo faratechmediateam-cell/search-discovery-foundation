@@ -12,6 +12,7 @@ import { ProductService, ProductNotFoundError } from "./product.service";
 import type {
   ListProductsResultDto,
   ProductDetailDto,
+  SearchProductsResultDto,
 } from "./product.dto";
 
 const CategorySchema = z.enum([
@@ -32,6 +33,15 @@ const SlugSchema = z.object({
   slug: z.string().min(1).max(200),
 });
 
+const SearchSchema = z.object({
+  // Empty string is allowed so the route can render its idle state
+  // without throwing — the service short-circuits to zero results.
+  q: z.string().max(200).default(""),
+  categoryKey: CategorySchema.optional(),
+  limit: z.number().int().min(1).max(50).optional(),
+  offset: z.number().int().min(0).optional(),
+});
+
 export const listProducts = createServerFn({ method: "GET" })
   .inputValidator((d: unknown) => ListSchema.parse(d ?? {}))
   .handler(async ({ data }): Promise<ListProductsResultDto> => {
@@ -49,4 +59,17 @@ export const getProductBySlug = createServerFn({ method: "GET" })
       if (err instanceof ProductNotFoundError) throw notFound();
       throw err;
     }
+  });
+
+/**
+ * Release 1.1 — Search & Discovery (FEATURE-0002 / RFC-0001).
+ *
+ * Public search endpoint. Validates input with Zod and delegates to
+ * `ProductService.search` — no business logic lives here.
+ */
+export const searchProducts = createServerFn({ method: "GET" })
+  .inputValidator((d: unknown) => SearchSchema.parse(d ?? {}))
+  .handler(async ({ data }): Promise<SearchProductsResultDto> => {
+    const service = new ProductService();
+    return service.search(data);
   });
