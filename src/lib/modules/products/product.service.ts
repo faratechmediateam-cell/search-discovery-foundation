@@ -13,6 +13,8 @@ import type {
   ListProductsQuery,
   ListProductsResultDto,
   ProductDetailDto,
+  RelatedProductsQuery,
+  RelatedProductsResultDto,
   SearchProductsQuery,
   SearchProductsResultDto,
 } from "./product.dto";
