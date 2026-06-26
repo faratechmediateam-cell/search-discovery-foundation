@@ -136,3 +136,25 @@ export interface ListProductsResultDto {
   items: ProductSummaryDto[];
   total: number;
 }
+
+/**
+ * Release 1.1 — Search & Discovery (FEATURE-0002 / RFC-0001).
+ *
+ * Free-text search across the catalogue. `q` is the user input as typed
+ * (already-localized — fa / en / ar) and `categoryKey` optionally narrows
+ * to a single category. Pagination uses the same `limit` / `offset`
+ * contract as `ListProductsQuery` so callers can swap shapes safely.
+ */
+export interface SearchProductsQuery {
+  q: string;
+  categoryKey?: ProductCategoryKey;
+  limit?: number;
+  offset?: number;
+}
+
+export interface SearchProductsResultDto {
+  /** Echoed back so the UI can render "results for …" without re-parsing. */
+  query: string;
+  items: ProductSummaryDto[];
+  total: number;
+}
