@@ -160,7 +160,7 @@ function SearchPage() {
           </div>
         ) : (
           <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 list-none p-0">
-            {data.items.map((p) => {
+            {data.items.map((p: ProductSummaryDto) => {
               const slug = enumToSlug(p.categoryKey);
               return (
                 <li key={p.id}>
