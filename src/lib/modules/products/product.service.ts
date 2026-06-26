@@ -53,4 +53,18 @@ export class ProductService {
     const { rows, total } = await this.repo.search({ ...query, q });
     return { query: q, items: rows.map(mapProductSummary), total };
   }
+
+  /**
+   * Release 1.3 — Related Products (FEATURE-0004 / RFC-0003).
+   *
+   * Thin delegation to the repository. The selection rule lives ONLY
+   * in `ProductRepository.findRelated`; this method exists so server
+   * functions, routes and the UI never call the repository directly.
+   */
+  async getRelated(
+    query: RelatedProductsQuery,
+  ): Promise<RelatedProductsResultDto> {
+    const { rows } = await this.repo.findRelated(query);
+    return { items: rows.map(mapProductSummary) };
+  }
 }
